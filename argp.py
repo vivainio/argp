@@ -8,7 +8,7 @@ Meant to be used like this::
 
     s2.arg("signature", metavar="SIGNATURE")
 
-    ops = args.parse()
+    argp.parse()
 """
 
 import argparse, sys
