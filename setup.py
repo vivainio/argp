@@ -6,5 +6,5 @@ setup(name='argp',
       author='Ville M. Vainio',
       author_email='vivainio@gmail.com',
       url='https://github.com/vivainio/argp',
-      packages=['argp'],
+      py_modules=["argp"]
      )
