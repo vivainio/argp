@@ -35,14 +35,18 @@ def init(parser = None):
 
     subparsers = p.add_subparsers()
 
+def parse_list(l):
+    parsed = p.parse_args(l)
+    if "func" in parsed:
+        parsed.func(parsed)
+    return parsed
+
 
 def parse():
     """ Call this after declaring your arguments
     """
-    parsed = p.parse_args(sys.argv[1:])
-    if parsed.func:
-        parsed.func(parsed)
-    return parsed
+    parse_list(sys.argv[1:])
+
 
 def sub(name, func,**kwarg):
     """ Add subparser
