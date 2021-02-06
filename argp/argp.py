@@ -18,14 +18,15 @@ import argparse, sys
 p = None
 subparsers = None
 
-def init(parser = None):
-    """ module needs to be initialized by 'init'.
+
+def init(parser=None):
+    """module needs to be initialized by 'init'.
 
     Can be called with parser to use a pre-built parser, otherwise
     a simple default parser is created
     """
 
-    global p,subparsers
+    global p, subparsers
     if parser is None:
         p = argparse.ArgumentParser()
     else:
@@ -35,6 +36,7 @@ def init(parser = None):
 
     subparsers = p.add_subparsers()
 
+
 def parse_list(l):
     parsed = p.parse_args(l)
     if "func" in parsed:
@@ -43,15 +45,12 @@ def parse_list(l):
 
 
 def parse():
-    """ Call this after declaring your arguments
-    """
+    """Call this after declaring your arguments"""
     parse_list(sys.argv[1:])
 
 
-def sub(name, func,**kwarg):
-    """ Add subparser
-
-    """
+def sub(name, func, **kwarg):
+    """Add subparser"""
     sp = subparsers.add_parser(name, **kwarg)
     sp.set_defaults(func=func)
     sp.arg = sp.add_argument
