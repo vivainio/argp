@@ -25,5 +25,5 @@ class ArgpTests(unittest.TestCase):
         s2.arg("one", action="store_true")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

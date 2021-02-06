@@ -21,7 +21,7 @@ subparsers: Any
 
 
 def init(parser: argparse.ArgumentParser = None):
-    """ This module needs to be initialized by 'init'.
+    """This module needs to be initialized by 'init'.
 
     Can be called with parser to use a pre-built parser, otherwise
     a simple default parser is created

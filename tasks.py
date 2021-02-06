@@ -15,7 +15,7 @@ def do_check(args):
 
 def do_black(args):
     """ do 'black' reformat of all code """
-    c("python -m black argp")
+    c("python -m black argp test")
 
 
 def do_test(args):
