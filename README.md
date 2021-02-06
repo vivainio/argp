@@ -4,8 +4,9 @@ Memorable api wrapper for argparse
 
 ## Installation
 
-pip install argp
-
+```
+$ pip install argp
+```
 ## Use case
 
 Argparse is a good library, but the API is not the most memorable. This provides a succinct wrapper that
