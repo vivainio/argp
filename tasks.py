@@ -21,8 +21,14 @@ def do_black(args):
 def do_test(args):
     c("python -m pytest")
 
+
 def default():
     show_help()
+
+
+def do_publish(args):
+    c('python setup.py sdist')
+    c('twine upload dist/*')
 
 
 # library functions here (or in own module, whatever, I don't care)

@@ -8,7 +8,7 @@ setup(name='argp',
       url='https://github.com/vivainio/argp',
       packages=['argp'],
       install_requires=[],
-      package_data= {
-            "argp": ["py.typed"]
+      package_data={
+          "argp": ["py.typed"]
       }
-     )
+      )
