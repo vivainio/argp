@@ -1,11 +1,12 @@
 import unittest
-
 import argp
+
 
 class ArgpTests(unittest.TestCase):
     def test_sub(self):
         argp.init()
         did_run = []
+
         def f1(args):
             did_run.append("f1")
 
@@ -22,7 +23,6 @@ class ArgpTests(unittest.TestCase):
         self.assertEqual(did_run, ["f1", "f1"])
 
         s2.arg("one", action="store_true")
-
 
 
 if __name__ == '__main__':

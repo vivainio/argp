@@ -14,13 +14,14 @@ Meant to be used like this::
 import argparse, sys
 
 # yes, 'p' will contain the parser
+from typing import Callable, Any
 
-p = None
-subparsers = None
+p: argparse.ArgumentParser
+subparsers: Any
 
 
-def init(parser=None):
-    """module needs to be initialized by 'init'.
+def init(parser: argparse.ArgumentParser = None):
+    """ This module needs to be initialized by 'init'.
 
     Can be called with parser to use a pre-built parser, otherwise
     a simple default parser is created
@@ -37,7 +38,7 @@ def init(parser=None):
     subparsers = p.add_subparsers()
 
 
-def parse_list(l):
+def parse_list(l: list):
     parsed = p.parse_args(l)
     if "func" in parsed:
         parsed.func(parsed)
@@ -49,7 +50,7 @@ def parse():
     parse_list(sys.argv[1:])
 
 
-def sub(name, func, **kwarg):
+def sub(name: str, func: Callable, **kwarg):
     """Add subparser"""
     sp = subparsers.add_parser(name, **kwarg)
     sp.set_defaults(func=func)

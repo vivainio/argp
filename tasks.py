@@ -10,18 +10,16 @@ PACKAGE = "argp"
 
 def do_check(args):
     """ typecheck, lint etc goes here """
-    c("mypy argp")
+    c("mypy argp test")
 
 
 def do_black(args):
     """ do 'black' reformat of all code """
-    c("py -m black argp")
+    c("python -m black argp")
 
 
 def do_test(args):
-    os.chdir("test")
-    c("pytest")
-
+    c("python -m pytest")
 
 def default():
     show_help()
