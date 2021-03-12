@@ -33,16 +33,20 @@ def init(parser: argparse.ArgumentParser = None):
     else:
         p = parser
 
-    arg = p.add_argument
-
     subparsers = p.add_subparsers()
 
 
-def parse_list(l: list):
+def parse_list(l: list) -> argparse.Namespace:
+    """ call if you want to provide the list yourself, instead of defaulting to sys.argv[1:] (as with parse) """
     parsed = p.parse_args(l)
-    if "func" in parsed:
-        parsed.func(parsed)
+    dispatch_parsed(parsed)
     return parsed
+
+
+def dispatch_parsed(parse_result: argparse.Namespace):
+    """ Call this if you did 'ArgumentParser.parse_arguments' yourself """
+    if "func" in parse_result:
+        parse_result.func(parse_result)
 
 
 def parse():

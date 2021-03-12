@@ -1,3 +1,4 @@
+import argparse
 import unittest
 import argp
 
@@ -24,6 +25,18 @@ class ArgpTests(unittest.TestCase):
 
         s2.arg("one", action="store_true")
 
+    def test_with_own_parser(self):
+        p = argparse.ArgumentParser()
+        argp.init(p)
+        called = [False]
+
+        def f(args):
+            called[0] = True
+
+        argp.sub("sub1", f)
+        parsed = p.parse_args(["sub1"])
+        argp.dispatch_parsed(parsed)
+        self.assertTrue(called[0])
 
 if __name__ == "__main__":
     unittest.main()
