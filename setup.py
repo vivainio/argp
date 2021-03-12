@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name='argp',
-      version='2.0.0',
+      version='2.1.0',
       description='Minimal wrapper for initializing argparse',
       author='Ville M. Vainio',
       author_email='ville.vainio@basware.com',
