@@ -26,9 +26,15 @@ def default():
     show_help()
 
 
+def do_docs(args):
+    c("pdoc3 -o docs --force --html " + PACKAGE)
+    c(f"mv docs/{PACKAGE}/* docs")
+    os.rmdir("docs/" + PACKAGE)
+
+
 def do_publish(args):
-    c('python setup.py sdist')
-    c('twine upload dist/*')
+    c("python setup.py sdist")
+    c("twine upload dist/*")
 
 
 # library functions here (or in own module, whatever, I don't care)
