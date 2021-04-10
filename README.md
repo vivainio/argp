@@ -31,5 +31,10 @@ argp.parse()
 
 ```
 
+Api [documentation](https://vivainio.github.io/argp/)
+
+## License
+
+MIT
 
 
