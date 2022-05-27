@@ -38,5 +38,24 @@ class ArgpTests(unittest.TestCase):
         argp.dispatch_parsed(parsed)
         self.assertTrue(called[0])
 
+    def test_nest_deep(self):
+        called = [False, False]
+        parser = argp.init()
+        def f(args):
+            called[0] = True
+        def f2(args):
+            called[1] = True
+
+        s = argp.group("group", help="Group with other commands")
+        s.sub("hello", f)
+        s.sub("world", f2)
+        argp.parse_list(["group", "hello"])
+        argp.parse_list(["group", "world"])
+
+        assert called == [True, True]
+        help = parser.format_help()
+        assert "Group with other commands" in help
+
+
 if __name__ == "__main__":
     unittest.main()

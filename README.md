@@ -33,6 +33,8 @@ argp.parse()
 
 Api [documentation](https://vivainio.github.io/argp/)
 
+See [Demo app](demoapp.py) for some other use cases
+
 ## License
 
 MIT

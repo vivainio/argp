@@ -17,10 +17,10 @@ import argparse, sys
 from typing import Callable, Any
 
 p: argparse.ArgumentParser
-subparsers: Any
+subparsers: Any = None
 
 
-def init(parser: argparse.ArgumentParser = None):
+def init(parser: argparse.ArgumentParser = None) -> argparse.ArgumentParser:
     """This module needs to be initialized by 'init'.
 
     Can be called with parser to use a pre-built parser, otherwise
@@ -33,7 +33,9 @@ def init(parser: argparse.ArgumentParser = None):
     else:
         p = parser
 
-    subparsers = p.add_subparsers()
+    subparsers = p.add_subparsers(required=True, dest="command")
+
+    return p
 
 
 def parse_list(l: list) -> argparse.Namespace:
@@ -49,14 +51,47 @@ def dispatch_parsed(parse_result: argparse.Namespace):
         parse_result.func(parse_result)
 
 
+def parse_or_show_help():
+    """ Show -h usage message if called without arguments """
+    argv = sys.argv[1:]
+    if not argv:
+        argv = ["-h"]
+    parse_list(argv)
+
+
 def parse():
     """Call this after declaring your arguments"""
     parse_list(sys.argv[1:])
 
 
-def sub(name: str, func: Callable, **kwarg):
-    """Add subparser"""
+def sub(name: str, func: Callable, **kwarg) -> argparse.ArgumentParser:
+    """Add subparser to top level parser"""
     sp = subparsers.add_parser(name, **kwarg)
+    _patch_subparser(sp)
+
     sp.set_defaults(func=func)
+    return sp
+
+
+def _patch_subparser(sp: argparse.ArgumentParser):
     sp.arg = sp.add_argument
+
+
+def group(name: str, **kwargs) -> argparse.ArgumentParser:
+    """ add group (for hierarchy)
+
+    """
+
+    global subparsers
+    sp = subparsers.add_parser(name, **kwargs)
+    _patch_subparser(sp)
+    own_subparsers = sp.add_subparsers(required=True, dest="command")
+
+    def do_sub(sname: str, func: Callable, **kwargs):
+        parser = own_subparsers.add_parser(sname, **kwargs)
+        _patch_subparser(parser)
+        parser.set_defaults(func=func)
+        return parser
+
+    sp.sub = do_sub
     return sp
