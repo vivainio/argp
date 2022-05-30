@@ -14,10 +14,32 @@ Meant to be used like this::
 import argparse, sys
 
 # yes, 'p' will contain the parser
-from typing import Callable, Any
+from functools import wraps
+from typing import Callable, Any, List
 
 p: argparse.ArgumentParser
 subparsers: Any = None
+
+_all_created_groups = {}
+
+def add_decorated_functions(functions: List[Callable]):
+    for decorated_fn in functions:
+        kwargs = decorated_fn._argp_kwargs.copy()
+        groupname = kwargs.pop("group", None)
+        if groupname is None:
+            sc = sub(decorated_fn._argp_name, decorated_fn, **kwargs)
+        else:
+            g = None
+            if groupname not in _all_created_groups:
+                g = group(groupname)
+                _all_created_groups[groupname] = g
+                ...
+            g = _all_created_groups[groupname]
+            sc = g.sub(decorated_fn._argp_name, decorated_fn, **kwargs)
+
+
+        for (args, kwargs) in getattr(decorated_fn, "_argp_args", []):
+            sc.arg(*args, **kwargs)
 
 
 def init(parser: argparse.ArgumentParser = None) -> argparse.ArgumentParser:
@@ -34,7 +56,7 @@ def init(parser: argparse.ArgumentParser = None) -> argparse.ArgumentParser:
         p = parser
 
     subparsers = p.add_subparsers(required=True, dest="command")
-
+    add_decorated_functions(_all_decorated)
     return p
 
 
@@ -95,3 +117,35 @@ def group(name: str, **kwargs) -> argparse.ArgumentParser:
 
     sp.sub = do_sub
     return sp
+
+# decorators
+
+
+_all_decorated = []
+_all_decorated_groups = {}
+
+
+def declare_group(name, **kwargs):
+    _all_decorated_groups[name] = kwargs
+    return name
+
+
+def command(name: str, **kwargs):
+    def actual_decorator(func):
+        _all_decorated.append(func)
+        func._argp_name = name
+        func._argp_kwargs = kwargs
+        return func
+    return actual_decorator
+
+
+def argument(*args, **kwargs):
+    def actual_decorator(func):
+        try:
+            func._argp_args.append((args, kwargs))
+        except AttributeError:
+            func._argp_args = [(args, kwargs)]
+        return func
+    return actual_decorator
+
+

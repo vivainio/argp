@@ -3,6 +3,27 @@ import unittest
 import argp
 
 
+g1 = argp.declare_group("decogroup")
+
+@argp.command("decorated", help="Do some decorated stuff")
+@argp.argument("-v", help="verbose", action="store_true")
+def do_decorated(args):
+    print("decorated", args)
+
+
+@argp.command("alsodecorated")
+def do_also_decorated(args):
+    print("also decorated")
+
+@argp.command("ingroup1", group =g1, help="group 1 help")
+def do_decorated_g(args):
+    print("also decorated, in group")
+
+@argp.command("ingroup2", group =g1, help="group 2 help")
+def do_decorated_g2(args):
+    print("also decorated, in group")
+
+
 class ArgpTests(unittest.TestCase):
     def test_sub(self):
         argp.init()
@@ -16,8 +37,6 @@ class ArgpTests(unittest.TestCase):
 
         s = argp.sub("sub1", f1)
         s2 = argp.sub("sub2", f2)
-        argp.parse_list([])
-        self.assertEqual(did_run, [])
         argp.parse_list(["sub1"])
         self.assertEqual(did_run, ["f1"])
         argp.parse_list(["sub1"])
@@ -55,6 +74,16 @@ class ArgpTests(unittest.TestCase):
         assert called == [True, True]
         help = parser.format_help()
         assert "Group with other commands" in help
+
+    def test_decorated(self):
+        p = argp.init()
+        argp.parse_list(["decorated"])
+        argp.parse_list(["decorated"])
+        help = p.format_help()
+        argp.parse_list(["decogroup", "ingroup1"])
+        argp.parse_list(["decogroup", "ingroup2"])
+
+        print(help)
 
 
 if __name__ == "__main__":
